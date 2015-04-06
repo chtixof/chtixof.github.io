@@ -4,12 +4,13 @@ title: About
 permalink: /about/
 ---
 
-Some information about you!
+Hey. The purpose of this blog is eventually to comment my publications on Github. Those are for now dedicated to [Yunohost](https://yunohost.org).
 
-### More Information
+#### Acknowledgements
 
-A place to include any other types of information that you'd like to include about yourself.
+Thanks to [Barry Clark's jekill-now](https://github.com/barryclark/jekyll-now), this blog was created in a few clicks.   
+And thanks to [dillinger.io](http://dillinger.io/), I improve my MD skills.
 
-### Contact me
-
-[email@domain.com](mailto:email@domain.com)
+### Other stuff in French
+<http://chbinz.free.fr/> : Où il est question d'informatique, d'internet, tout en vrac.   
+<https://twitter.com/chtixof> : Eclecgeek, de pas sage, je cycle aussi, et je recycle.
