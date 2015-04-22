@@ -1,0 +1,115 @@
+<html>
+<!--By ChtiXof, 2015-->
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<title>Tell</title>
+<style type="text/css">
+  body { background: #CECECE; font-family: Arial, Sans-Serif; }
+  h1 {margin: 0 0 15px 0;}
+  #cont { margin: 0 auto; padding: 10px 0;width: 600px; }
+  #box { padding: 25px 30px 25px 30px; background: #fff; margin-bottom: 10px; }
+  #goo {width:600px;}
+  #text {width:600px; height:300px;margin-bottom: 10px;}
+  #md {display:none}
+  .icoimg {width:16px; height:16px;float: right;padding: 2px;  cursor: pointer;}
+  code {
+    background-color: rgba(0,0,0,0.04);
+    color: #283B53;
+    font-family: monospace;
+    padding: 0px 4px;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+</style>
+<script language="javascript" src="lib/lz-string.min.js"></script>
+<script src="lib/markdown.min.js"></script>
+<script type="text/javascript" src="lib/jquery-2.1.3.min.js"></script>
+  </head>
+  <body>
+    <div id='cont'>
+      <div id='box'></div>
+      <div id="md">
+        You may want to edit the markdown code:
+        <textarea id='text'></textarea>
+        <div id='short'> You may want to paste here the short URL from <a href="http://goo.gl/">goo.gl</a> and get the shortcut:
+          <input type='text' id='goo'>
+        </div>
+        <img src="img/orangelockopen.png" alt="Lock!" title="Lock!" class="icoimg" id='tell'>
+      </div>
+      <img src="img/greenlockclose.png" alt="Unlock!" title="Unlock!" class="icoimg" id='show'>
+      </div>
+<script type="text/javascript">
+
+function info(){
+  s='#Tell\n';
+  s+='You may **unlock** this document and type in whatever you want in the text box. You may use the [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) syntax or plain HTML. In addition, if they are between spaces, URL are linked this way: http://chtixof.github.io/tell-universal-html-page or transformed to images if they are preceeded by a !, this way:\n\n';   
+  s+=' !https://avatars3.githubusercontent.com/u/9341373?v=3&s=60 \n\n';
+  s+='The text is coded in the URL. You can shorten it using goo.gl.\n\n';
+  s+='In any case, remember that you are responsible for what you write.\n';
+  return(s);
+}
+
+// fonction regexp utisée dans la fonction lienurl
+// add link or img
+function replacer(match, p1,p2,p3, offset, string){
+  if (p1.charAt(0)=='!') {
+    return(' <img src="' + p1.substr(1) + '" /> ');
+  } else {
+    return ' <a href="' + p1 + '">' + p1 + '</a> ';
+  }       
+}
+// scans URLS 
+function lienurl(s){
+  return s.replace(/\s(!?https?:\/\/([-\w\.]+[-\w]+(:\d+)?(\/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?))([\s$])/g,replacer);
+}
+//  
+function filldoc(frag){
+  $("#text").html(LZString.decompressFromEncodedURIComponent(frag));
+  $("#box").html(lienurl(markdown.toHTML($("#text").text())));
+}
+// jquery
+$(document).ready(function() {
+var frag=window.location.hash.substr(1);
+  if (frag.length==0){
+     $("#text").html(info());
+     $("#box").html(lienurl(markdown.toHTML(info())));
+  } else if (frag.length<9){
+    sessionStorage.frag=frag;
+// load page from goo.gl
+    window.location.replace('http://goo.gl/'+frag);
+  } else {
+    filldoc(frag);
+    if (sessionStorage.frag!=undefined) {
+      frag=sessionStorage.frag;
+      window.history.replaceState( {} , '','.#'+frag);
+      sessionStorage.removeItem('frag');
+    }
+  }
+  $("#tell").click(function() {
+    var part=$("#goo").val().split("/");
+    if (part.length>1){
+      frag=part[part.length-1];
+      window.history.replaceState( {} , '','.#'+frag);
+      location.reload(true)
+    } else {
+      frag=LZString.compressToEncodedURIComponent($("#text").val());
+      window.history.replaceState( {} , '','.#'+frag);
+      filldoc(frag);
+      $("#md").hide();
+      $("#show").show();
+    }
+  });
+  $("#show").click(function() {
+    $("#md").show();
+    $("#show").hide();
+    if (frag.length>8) $("#short").show();
+    else               $("#short").hide();
+  });
+//disable shortcut zone if text being edited
+  $("#text").focus(function() {
+    $("#short").hide();
+    $("#goo").val("");
+});
+});
+</script>
+  </body>
+</html>
