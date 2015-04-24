@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
-Hey. The purpose of this blog is eventually to comment my [publications on Github](https://github.com/chtixof). Those are for now dedicated to [Yunohost](https://yunohost.org).
+Hey. The purpose of this blog is eventually to comment my [publications on Github](https://github.com/chtixof).
 
 #### Acknowledgements
 
