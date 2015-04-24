@@ -43,7 +43,7 @@ function info(){
   s='#Tell\n';
   s+='You may *unlock* !https://ynhdev.local/dev/tell/img/orangelockopen.png this document and type in whatever you want in the text box, using the [markdown](http://chtixof.github.io/tell/#4hUA9N) syntax.\n\n';
   s+='*Lock* !http://chtixof.github.io/tell/img/greenlockclose.png back to encode the page and the URL. Everything is the URL. Nothing is on the server.\n\n';
-  s+='If you *unlock* !https://ynhdev.local/dev/tell/img/orangelockopen.png again, you can shorten the URL with goo.gl.\n\n';
+  s+='If you *unlock* !http://chtixof.github.io/tell/img/orangelockopen.png again, you can shorten the URL with goo.gl.\n\n';
   s+='Remember: you are responsible for what you write.\n\n';
   s+='More [about Tell](http://chtixof.github.io/tell-universal-html-page/).';
   return(s);
@@ -64,37 +64,34 @@ function lienurl(s){
 }
 //  
 function filldoc(frag){
-  $("#text").html(LZString.decompressFromEncodedURIComponent(frag));
-  $("#box").html(lienurl(markdown.toHTML($("#text").text())));
-  $("#md").hide();
-  $("#show").show();
 }
 //
 function init(){
   frag=window.location.hash.substr(1);
   if (frag.length==0){
      $("#text").html(info());
-     $("#box").html(lienurl(markdown.toHTML(info())));
   } else if (frag.length<9){
     sessionStorage.frag=frag;
 // load page from goo.gl
     window.location.replace('http://goo.gl/'+frag);
+    return;
   } else {
-    filldoc(frag);
+    $("#text").html(LZString.decompressFromEncodedURIComponent(frag));
+    $("#md").hide();
+    $("#show").show();
     if (sessionStorage.frag!=undefined) {
       frag=sessionStorage.frag;
       sessionStorage.removeItem('frag');
       window.history.replaceState( {} , '','.#'+frag);
     }
   }
+  $("#box").html(lienurl(markdown.toHTML($("#text").text())));
 }
 
 // jquery
 $(document).ready(function() {
   var frag='';
   init();
-
-  $(window).bind('hashchange', init);
 
   $("#tell").click(function() {
     var part=$("#goo").val().split("/");
@@ -104,6 +101,7 @@ $(document).ready(function() {
       frag=LZString.compressToEncodedURIComponent($("#text").val());
     }
     window.history.replaceState( {} , '','.#'+frag);
+    init();
   });
   $("#show").click(function() {
     $("#md").show();
