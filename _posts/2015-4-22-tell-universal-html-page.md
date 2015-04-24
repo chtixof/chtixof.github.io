@@ -6,6 +6,8 @@ I have just been writing "Tell", an HTML page whose content is coded in the URL.
 
 Here it is: [http://chtixof.github.io/tell/](http://chtixof.github.io/tell/)
 
+And here are the [sources](https://github.com/chtixof/chtixof.github.io/tree/master/tell)
+
 It relies on:
 
 - [lz-string](https://github.com/pieroxy/lz-string) to short-URI-code the content 
