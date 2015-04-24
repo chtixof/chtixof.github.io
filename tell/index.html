@@ -77,8 +77,6 @@ function init(){
     return;
   } else {
     $("#text").html(LZString.decompressFromEncodedURIComponent(frag));
-    $("#md").hide();
-    $("#show").show();
     if (sessionStorage.frag!=undefined) {
       frag=sessionStorage.frag;
       sessionStorage.removeItem('frag');
@@ -93,6 +91,10 @@ $(document).ready(function() {
   var frag='';
   init();
 
+  $(window).bind('hashchange', function () { 
+    init();
+  });
+
   $("#tell").click(function() {
     var part=$("#goo").val().split("/");
     if (part.length>1){
@@ -100,8 +102,9 @@ $(document).ready(function() {
     } else {
       frag=LZString.compressToEncodedURIComponent($("#text").val());
     }
-    window.history.replaceState( {} , '','.#'+frag);
-    init();
+    window.location.hash=frag;
+    $("#md").hide();
+    $("#show").show();
   });
   $("#show").click(function() {
     $("#md").show();
