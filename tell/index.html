@@ -21,8 +21,8 @@
   }
 </style>
 <script language="javascript" src="lib/lz-string.min.js"></script>
-<script src="lib/markdown.min.js"></script>
-<script type="text/javascript" src="lib/jquery-2.1.3.min.js"></script>
+<script language="javascript" src="lib/marked.js"></script>
+<script language="javascript" src="lib/jquery-2.1.3.min.js"></script>
   </head>
   <body>
     <div id='cont'>
@@ -40,8 +40,8 @@
 <script type="text/javascript">
 
 function info(){
-  s='#Tell\n';
-  s+='You may *unlock* ![](img/orangelockopen.png) this document and type in whatever you want in the text box, using the [markdown](http://chtixof.github.io/tell/#4hUA9N) syntax.\n\n';
+  s='# Tell\n';
+  s+='You may *unlock* ![](img/orangelockopen.png) this document and type in whatever you want in the text box, using the markdown syntax.\n\n';
   s+='*Lock* ![](img/greenlockclose.png) back to encode the page and the URL. Everything is the URL. Nothing is on the server.\n\n';
   s+='If you *unlock* ![](img/orangelockopen.png) again, you can shorten the URL with goo.gl.\n\n';
   s+='Remember: you are responsible for what you write.\n\n';
@@ -49,22 +49,6 @@ function info(){
   return(s);
 }
 
-// fonction regexp utisée dans la fonction lienurl
-// add link or img
-function replacer(match, p1,p2,p3, offset, string){
-  if (p1.charAt(0)=='!') {
-    return(' <img src="' + p1.substr(1) + '" /> ');
-  } else {
-    return ' <a href="' + p1 + '">' + p1 + '</a> ';
-  }       
-}
-// scans URLS 
-function lienurl(s){
-  return s.replace(/\s(!?https?:\/\/([-\w\.]+[-\w]+(:\d+)?(\/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?))([\s$])/g,replacer);
-}
-//  
-function filldoc(frag){
-}
 //
 function init(){
   frag=window.location.hash.substr(1);
@@ -83,7 +67,7 @@ function init(){
       window.history.replaceState( {} , '','.#'+frag);
     }
   }
-  $("#box").html(lienurl(markdown.toHTML($("#text").text())));
+  $("#box").html(marked($("#text").text()));
 }
 
 // jquery
