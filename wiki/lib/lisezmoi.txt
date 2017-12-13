@@ -1,1 +1,0 @@
-Vous pouvez configurer dans le fichier mdisp.js le répertoire par défaut des fichiers markdown et le fichier markdown qui sera affiché par défaut, en l'absence de paramètre # .
