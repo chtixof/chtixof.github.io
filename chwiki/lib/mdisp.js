@@ -1,4 +1,4 @@
-/* Msisp.js - by C. Desmarchelier - Nov.2017*/
+/* Mdisp.js - by Chtixof - Nov.2017*/
 mdefault = "index.md"   // variable à modifier pour préciser le fichier md affiché par défaut, chemin compris à partir du fichier index.html
 basemd = "." ;        // variable à modifier pour préciser le répertoire racine par défaut des fichiers md
 
