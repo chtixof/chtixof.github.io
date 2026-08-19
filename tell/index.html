@@ -2,6 +2,7 @@
 <!--By ChtiXof, 2015-->
   <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Tell</title>
 <style type="text/css">
   body { background: #CECECE; font-family: Arial, Sans-Serif; }
@@ -9,7 +10,7 @@
   #cont { margin: 0 auto; padding: 10px 0;width: 600px; }
   #box { padding: 25px 30px 25px 30px; background: #fff; margin-bottom: 10px; }
   #goo {width:600px;}
-  #text {width:600px; height:300px;margin-bottom: 10px;}
+  #text {width:100%; height:300px;margin-bottom: 10px;}
   #md {display:none}
   .icoimg {width:16px; height:16px;float: right;padding: 2px;  cursor: pointer;}
   code {
@@ -19,6 +20,15 @@
     padding: 0px 4px;
     border: 1px solid rgba(0,0,0,0.06);
   }
+  @media (max-width: 850px) {
+    #cont {
+        padding: 10px; 
+        margin: 10px auto !important;
+        font-size: 14px; 
+        max-width: 100%; 
+        box-sizing: border-box; 
+    }
+}
 </style>
 <script language="javascript" src="lib/lz-string.min.js"></script>
 <script language="javascript" src="lib/marked.js"></script>
@@ -30,43 +40,30 @@
       <div id="md">
         You may want to edit the markdown code:
         <textarea id='text'></textarea>
-        <div id='short'> You may want to paste here the short URL from <a href="http://goo.gl/">goo.gl</a> and get the shortcut:
-          <input type='text' id='goo'>
-        </div>
         <img src="img/orangelockopen.png" alt="Lock!" title="Lock!" class="icoimg" id='tell'>
       </div>
       <img src="img/greenlockclose.png" alt="Unlock!" title="Unlock!" class="icoimg" id='show'>
       </div>
 <script type="text/javascript">
 
-function info(){
-  s='# Tell\n';
-  s+='You may *unlock* ![](img/orangelockopen.png) this document and type in whatever you want in the text box, using the [markdown](#McnbGR) syntax.\n\n';
-  s+='*Lock* ![](img/greenlockclose.png) back to encode the page and the URL. Everything is the URL. Nothing is on the server.\n\n';
-  s+='If you *unlock* ![](img/orangelockopen.png) again, you can shorten the URL with goo.gl.\n\n';
-  s+='Remember: you are responsible for what you write.\n\n';
-  s+='More [about Tell](http://chtixof.github.io/tell-universal-html-page/).';
-  return(s);
-}
-
 //
 function init(){
   frag=window.location.hash.substr(1);
-  if (frag.length==0){
-     $("#text").html(info());
-  } else if (frag.length<9){
-    sessionStorage.frag=frag;
-// load page from goo.gl
-    window.location.replace('http://goo.gl/'+frag);
-    return;
-  } else {
-    $("#text").html(LZString.decompressFromEncodedURIComponent(frag));
-    if (sessionStorage.frag!=undefined) {
-      frag=sessionStorage.frag;
-      sessionStorage.removeItem('frag');
-      window.history.replaceState( {} , '','.#'+frag);
-    }
-  }
+  $("#text").html((frag.length===0) ? `# [Tell](#)
+
+- Click on the bottom right locker ![](img/greenlockclose.png) to unlock this document
+- This displays a text box with the text coded in [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+- Edit the text and type in whatever you want
+- Click back on the locker ![](img/orangelockopen.png) to relock the document
+- This encodes the page with the new text and updates the URL
+- You may then copy the URL and use it elsewhere
+
+What you typed is not sent to the server: it is fully coded in the URL.
+
+Remember: you are responsible for what you write.
+
+More [about Tell](http://chtixof.github.io/tell-universal-html-page/).
+     ` : LZString.decompressFromEncodedURIComponent(frag));
   $("#box").html(marked($("#text").text()));
 }
 
@@ -80,27 +77,14 @@ $(document).ready(function() {
   });
 
   $("#tell").click(function() {
-    var part=$("#goo").val().split("/");
-    if (part.length>1){
-      frag=part[part.length-1];
-    } else {
-      frag=LZString.compressToEncodedURIComponent($("#text").val());
-    }
-    window.location.hash=frag;
+    window.location.hash=LZString.compressToEncodedURIComponent($("#text").val());
     $("#md").hide();
     $("#show").show();
   });
   $("#show").click(function() {
     $("#md").show();
     $("#show").hide();
-    if (frag.length>8) $("#short").show();
-    else               $("#short").hide();
   });
-//disable shortcut zone if text being edited
-  $("#text").focus(function() {
-    $("#short").hide();
-    $("#goo").val("");
-});
 });
 </script>
   </body>
